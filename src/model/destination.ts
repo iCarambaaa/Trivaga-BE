@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose
 
 interface Destination {
-    city: []
+    city: string
 }
 
-const DestinationSchema = new Schema({
+
+const DestinationSchema = new Schema<>({
     city: [{ types: Object}]
 })
 
