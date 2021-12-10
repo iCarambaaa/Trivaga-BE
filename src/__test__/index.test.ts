@@ -17,16 +17,6 @@ describe("hello test test test jest", () => {
     });
   });
 
-  afterAll((done) => {
-    mongoose.connection
-      .dropDatabase()
-      .then(() => {
-        return mongoose.connection.close();
-      })
-      .then(() => {
-        done();
-      });
-  });
 
   const validAccommodation = {
     name: "Test Product",
@@ -37,6 +27,7 @@ describe("hello test test test jest", () => {
 
   let _id: string;
 
+  console.log('========================>', validAccommodation)
   it("should check that the POST /accommodation endpoint creates a new product", async () => {
     const response = await request
       .post("/accommodation")
@@ -114,5 +105,16 @@ describe("hello test test test jest", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
+  });
+
+  afterAll((done) => {
+    mongoose.connection
+      .dropDatabase()
+      .then(() => {
+        return mongoose.connection.close();
+      })
+      .then(() => {
+        done();
+      });
   });
 });
