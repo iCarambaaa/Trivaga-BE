@@ -115,4 +115,25 @@ describe("hello test test test jest", () => {
     expect(response.status).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
   });
+
+
+  it("should check that the GET /destinations endpoint returns 404 if destination doesnt exist", async () => {
+    const response = await request.get("/destinations/Catania");
+
+    expect(response.status).toBe(404);
+  });
+
+
+
+  //need to check this one
+  /* it("should check that the POST /destinations endpoint returns 201 if destination gets created successfully", async () => {  
+    const response = await request.get("/destinations/").send({
+      name: "Test Product 23",
+      description: "nice, nice",
+      maxGuests: 110,
+      city: "San Francisco",
+    });
+
+  }) */
+
 });
