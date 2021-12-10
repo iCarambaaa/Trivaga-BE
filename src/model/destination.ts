@@ -9,3 +9,5 @@ interface Destination {
 const DestinationSchema = new Schema({
     city: []
 })
+
+//cast
