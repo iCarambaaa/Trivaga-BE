@@ -7,7 +7,7 @@ interface Accomodation {
     name: string;
     description: string;
     maxGuests: number;
-    city: string;
+    city: typeof Schema;
 }
 
 const AccomodationSchema = new Schema<Accomodation>({
