@@ -69,7 +69,7 @@ AccRouter.route("/:id")
       const id = req.params.id;
       const deleted = await AccomodationSchema.findByIdAndDelete(id);
       if (deleted) {
-        res.status(204);
+        res.status(204).send({});
       } else {
         res.status(404).send({ message: "Accomodation with ${id} not found" });
       }

@@ -1,6 +1,7 @@
 import express from "express";
-// import AccomodationSchema from "../model/accomodation";
+import AccomodationSchema from "../model/accomodation";
 import DestinationSchema from "../model/destination";
+import mongoose from "mongoose";
 
 const DesRouter = express.Router();
 
@@ -42,4 +43,21 @@ DesRouter.route("/")
       console.log(error);
     }
   });
+
+DesRouter.route("/:cityId").get(async (req, res) => {
+  try {
+    const accomodations = await AccomodationSchema.find({
+      city: req.params.cityId,
+    });
+    //   const bla = await DestinationSchema.find({city: req.params.cityId})
+
+    if (accomodations) {
+      res.status(200).send(accomodations);
+    } else {
+      res.status(404).send("VaVanCulo");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 export default DesRouter;
