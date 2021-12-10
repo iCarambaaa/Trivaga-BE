@@ -7,7 +7,9 @@ const AccRouter = express.Router();
 AccRouter.route("/")
   .get(async (req, res) => {
     try {
-      const accommodations = await AccomodationSchema.find({});
+      const accommodations = await AccomodationSchema.find({}).populate({
+        path: "city",
+      });
       if (accommodations) {
         res.status(200).send(accommodations);
       } else {

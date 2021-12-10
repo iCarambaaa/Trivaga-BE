@@ -17,15 +17,27 @@ describe("hello test test test jest", () => {
     });
   });
 
+  let cityId: string = "";
+  let _id: string;
+
+  //need to be first
+  it("should check that the POST /destinations endpoint returns 201 if destination gets created successfully", async () => {
+    const response = await request.post("/destinations/").send({
+      city: "Milano",
+    });
+
+    expect(response.status).toBe(201);
+    expect(response.body._id).toBeDefined();
+    expect(response.body.city).toBeDefined();
+    cityId = response.body._id;
+  });
+
   const validAccommodation = {
     name: "Test Product",
     description: "nice",
     maxGuests: 10,
-    city: "San Francisco",
+    city: cityId,
   };
-
-  let _id: string;
-  let cityId: string;
 
   console.log("========================>", validAccommodation);
   it("should check that the POST /accommodation endpoint creates a new product", async () => {
@@ -40,18 +52,6 @@ describe("hello test test test jest", () => {
     expect(response.body.maxGuests).toBeDefined();
     expect(response.body.city).toBeDefined();
     _id = response.body._id;
-  });
-
-  //need to check this one
-  it("should check that the POST /destinations endpoint returns 201 if destination gets created successfully", async () => {
-    const response = await request.post("/destinations/").send({
-      city: "Milano",
-    });
-
-    expect(response.status).toBe(201);
-    expect(response.body._id).toBeDefined();
-    expect(response.body.city).toBeDefined();
-    cityId = response.body._id;
   });
 
   it("should check that the GET /accommodation endpoint returns a success", async () => {
