@@ -17,7 +17,6 @@ describe("hello test test test jest", () => {
     });
   });
 
-
   const validAccommodation = {
     name: "Test Product",
     description: "nice",
@@ -26,8 +25,9 @@ describe("hello test test test jest", () => {
   };
 
   let _id: string;
+  let cityId: string;
 
-  console.log('========================>', validAccommodation)
+  console.log("========================>", validAccommodation);
   it("should check that the POST /accommodation endpoint creates a new product", async () => {
     const response = await request
       .post("/accommodation")
@@ -42,7 +42,19 @@ describe("hello test test test jest", () => {
     _id = response.body._id;
   });
 
-  it("should check that the GET /accommodation endpoint returns a success message", async () => {
+  //need to check this one
+  it("should check that the POST /destinations endpoint returns 201 if destination gets created successfully", async () => {
+    const response = await request.post("/destinations/").send({
+      city: "Milano",
+    });
+
+    expect(response.status).toBe(201);
+    expect(response.body._id).toBeDefined();
+    expect(response.body.city).toBeDefined();
+    cityId = response.body._id;
+  });
+
+  it("should check that the GET /accommodation endpoint returns a success", async () => {
     const response = await request.get("/accommodation");
 
     expect(response.status).toBe(200);
@@ -55,7 +67,6 @@ describe("hello test test test jest", () => {
     expect(response.status).toBe(200);
   });
 
-
   it("should check that the PUT /accommodation/:id endpoint returns a 203 when the product does exist", async () => {
     const response = await request.put(/accommodation/ + _id).send({
       name: "Test Product 23",
@@ -66,7 +77,6 @@ describe("hello test test test jest", () => {
 
     expect(response.status).toBe(203);
   });
-
 
   it("should check that the DELETE /accommodation/:id endpoint returns a 204 when the product does exist", async () => {
     const response = await request.delete(/accommodation/ + _id);
@@ -95,8 +105,6 @@ describe("hello test test test jest", () => {
     expect(response.status).toBe(404);
   });
 
-
-
   it("should check that the GET /destinations endpoint returns 200", async () => {
     const response = await request.get("/destinations");
 
@@ -111,26 +119,11 @@ describe("hello test test test jest", () => {
     expect(response.body.length).toBeGreaterThan(0);
   });
 
-
-
   it("should check that the GET /destinations endpoint returns 404 if destination doesnt exist", async () => {
     const response = await request.get("/destinations/Catania");
 
     expect(response.status).toBe(404);
   });
-
-
-
-  //need to check this one
-  /* it("should check that the POST /destinations endpoint returns 201 if destination gets created successfully", async () => {  
-    const response = await request.get("/destinations/").send({
-      name: "Test Product 23",
-      description: "nice, nice",
-      maxGuests: 110,
-      city: "San Francisco",
-    });
-
-  }) */
 
   afterAll((done) => {
     mongoose.connection
@@ -143,5 +136,3 @@ describe("hello test test test jest", () => {
       });
   });
 });
-
-

@@ -1,16 +1,13 @@
 import mongoose from "mongoose";
 
-const { Schema, model } = mongoose
+const { Schema, model } = mongoose;
 
 interface Destination {
-    city: string
+  city: string;
 }
 
+const DestinationSchema = new Schema<Destination>({
+  city: { type: String, required: true },
+});
 
-const DestinationSchema = new Schema<>({
-    city: [{ types: Object}]
-})
-
-export default model('Destination', DestinationSchema)
-
-//cast
+export default model("Destination", DestinationSchema);
