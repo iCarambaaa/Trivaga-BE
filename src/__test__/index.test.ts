@@ -98,14 +98,14 @@ describe("hello test test test jest", () => {
   });
 
   it("should check that the GET /destinations endpoint returns all accommodations", async () => {
-    const response = await request.get("/destinations/" + cityId);
+    const response = await request.get("/destinations/");
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
   });
 
   it("should check that the GET /destinations endpoint returns 404 if destination doesn't exist", async () => {
-    const response = await request.get("/destinations/" + "cityId");
+    const response = await request.get("/destinations/" + "_id");
 
     expect(response.status).toBe(404);
   });
