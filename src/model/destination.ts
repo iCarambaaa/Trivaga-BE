@@ -7,7 +7,9 @@ interface Destination {
 }
 
 const DestinationSchema = new Schema({
-    city: []
+    city: [{ types: Object}]
 })
+
+export default model('Destination', DestinationSchema)
 
 //cast
