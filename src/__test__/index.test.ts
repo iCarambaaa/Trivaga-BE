@@ -17,7 +17,8 @@ describe("hello test test test jest", () => {
     });
   });
 
-  let cityId: string = "";
+  let cityId: mongoose.Schema.Types.ObjectId | undefined;
+  // var cityId: string
   let _id: string;
 
   //need to be first
@@ -25,21 +26,22 @@ describe("hello test test test jest", () => {
     const response = await request.post("/destinations/").send({
       city: "Milano",
     });
-
+    console.log(response.body);
     expect(response.status).toBe(201);
     expect(response.body._id).toBeDefined();
     expect(response.body.city).toBeDefined();
     cityId = response.body._id;
+    console.log(cityId);
   });
-
+  console.log(cityId);
   const validAccommodation = {
     name: "Test Product",
     description: "nice",
     maxGuests: 10,
-    city: cityId,
+    // city: cityId,
   };
 
-  console.log("========================>", validAccommodation);
+  //   console.log("========================>", validAccommodation);
   it("should check that the POST /accommodation endpoint creates a new product", async () => {
     const response = await request
       .post("/accommodation")
