@@ -86,17 +86,6 @@ describe("hello test test test jest", () => {
     expect(response.status).toBe(203);
   });
 
-  it("should check that the DELETE /accommodation/:id endpoint returns a 204 when the product does exist", async () => {
-    const response = await request.delete(/accommodation/ + _id);
-    expect(response.status).toBe(204);
-  });
-
-  it("should check that the GET /accommodation/:id endpoint returns a 404 error when the product does not exist", async () => {
-    const response = await request.get("/accommodation/" + _id);
-
-    expect(response.status).toBe(404);
-  });
-
   it("should check that the GET /destinations endpoint returns all accommodations", async () => {
     const response = await request.get("/destinations/");
 
@@ -104,8 +93,26 @@ describe("hello test test test jest", () => {
     expect(response.body.length).toBeGreaterThan(0);
   });
 
+  it("should check that the GET /destinations endpoint returns 200", async () => {
+    const response = await request.get("/destinations/" + cityId);
+    console.log(cityId);
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBeGreaterThan(0);
+  });
+
+  it("should check that the DELETE /accommodation/:id endpoint returns a 204 when the product does exist", async () => {
+    const response = await request.delete(/accommodation/ + _id);
+    expect(response.status).toBe(204);
+  });
+
   it("should check that the DELETE /accommodation/:id endpoint returns a 404 when the product does not exist", async () => {
     const response = await request.delete("/accommodation/" + _id);
+    expect(response.status).toBe(404);
+  });
+
+  it("should check that the GET /accommodation/:id endpoint returns a 404 error when the accommodation does not exist", async () => {
+    const response = await request.get("/accommodation/" + _id);
+
     expect(response.status).toBe(404);
   });
 
@@ -118,13 +125,6 @@ describe("hello test test test jest", () => {
     });
 
     expect(response.status).toBe(404);
-  });
-
-  it("should check that the GET /destinations endpoint returns 200", async () => {
-    const response = await request.get("/destinations/" + cityId);
-    console.log(cityId);
-    expect(response.status).toBe(200);
-    // expect(response.body.length).toBeGreaterThan(0);
   });
 
   afterAll((done) => {
