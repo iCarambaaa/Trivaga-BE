@@ -104,11 +104,7 @@ describe("hello test test test jest", () => {
     expect(response.body.length).toBeGreaterThan(0);
   });
 
-  it("should check that the GET /destinations endpoint returns 404 if destination doesn't exist", async () => {
-    const response = await request.get("/destinations/" + "_id");
 
-    expect(response.status).toBe(404);
-  });
 
   it("should check that the DELETE /accommodation/:id endpoint returns a 404 when the product does not exist", async () => {
     const response = await request.delete("/accommodation/" + _id);
