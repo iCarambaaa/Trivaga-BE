@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 const { Schema, model } = mongoose;
 
@@ -6,7 +6,7 @@ interface Accomodation {
   name: string;
   description: string;
   maxGuests: number;
-  city: any;
+  city: Types.ObjectId;
 }
 
 const AccomodationSchema = new Schema<Accomodation>({

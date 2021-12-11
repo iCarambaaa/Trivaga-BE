@@ -49,12 +49,10 @@ DesRouter.route("/:cityId").get(async (req, res) => {
     const accomodations = await AccomodationSchema.find({
       city: req.params.cityId,
     });
-    //   const bla = await DestinationSchema.find({city: req.params.cityId})
-
     if (accomodations) {
       res.status(200).send(accomodations);
     } else {
-      res.status(404).send("VaVanCulo");
+      res.status(404).send("Accomodation not found");
     }
   } catch (error) {
     console.log(error);
