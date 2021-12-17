@@ -7,7 +7,7 @@ import { JWTAuthMiddleware } from "../auth/token";
 const AccRouter = express.Router();
 
 AccRouter.route("/")
-  .get(async (req, res) => {
+  .get(JWTAuthMiddleware, async (req, res) => {
     try {
       const accommodations = await AccomodationSchema.find({}).populate({
         path: "city",
@@ -21,7 +21,7 @@ AccRouter.route("/")
       console.log(error);
     }
   })
-  .post(async (req, res) => {
+  .post(JWTAuthMiddleware, RoleCheckMiddleware, async (req, res) => {
     try {
       const accommodation = new AccomodationSchema(req.body);
       if (accommodation) {
@@ -36,7 +36,7 @@ AccRouter.route("/")
   });
 
 AccRouter.route("/:id")
-  .get(async (req, res) => {
+  .get(JWTAuthMiddleware, async (req, res) => {
     try {
       const id = req.params.id;
       const accomodation = await AccomodationSchema.findById(id);
@@ -49,7 +49,7 @@ AccRouter.route("/:id")
       console.log(error);
     }
   })
-  .put(async (req, res) => {
+  .put(JWTAuthMiddleware, RoleCheckMiddleware, async (req, res) => {
     try {
       const id = req.params.id;
       const updatedAccomodation = await AccomodationSchema.findByIdAndUpdate(
@@ -66,7 +66,7 @@ AccRouter.route("/:id")
       console.log(error);
     }
   })
-  .delete(async (req, res) => {
+  .delete(JWTAuthMiddleware, RoleCheckMiddleware, async (req, res) => {
     try {
       const id = req.params.id;
       const deleted = await AccomodationSchema.findByIdAndDelete(id);

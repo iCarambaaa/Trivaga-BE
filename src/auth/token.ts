@@ -1,7 +1,7 @@
 import { RequestHandler, Request } from "express"; // types for req, res, next
 import createHttpError from "http-errors";
 import UserModel from "../model/user";
-import { verifyJWT } from "./tools.js";
+import { verifyJWT } from "./tools";
 
 export const JWTAuthMiddleware: RequestHandler = async (
   req: Request,

@@ -5,6 +5,7 @@ import AccomodationModel from "../model/accomodation";
 import UserModel from "../model/user";
 import { JWTAuthMiddleware } from "../auth/token";
 import { JWTAuthenticate, verifyRefreshAndGenerateTokens } from "../auth/tools";
+import { RoleCheckMiddleware } from "../auth/roleCheck";
 
 const UserRouter = express.Router();
 
@@ -69,7 +70,7 @@ UserRouter.get("/", async (req, res, next) => {
   }
 });
 
-UserRouter.get("/me", async (req, res, next) => {
+UserRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.user._id);
     res.send({
@@ -81,16 +82,23 @@ UserRouter.get("/me", async (req, res, next) => {
   }
 });
 
-UserRouter.get("/me/accommodation", async (req, res, next) => {
-  try {
-    const accomodations = await AccomodationModel.find({ host: req.user._id });
-    res.send({
-      accomodations,
-    });
-  } catch (error) {
-    console.log(error);
-    next(error);
+UserRouter.get(
+  "/me/accommodation",
+  JWTAuthMiddleware,
+  RoleCheckMiddleware,
+  async (req, res, next) => {
+    try {
+      const accomodations = await AccomodationModel.find({
+        host: req.user._id,
+      });
+      res.send({
+        accomodations,
+      });
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   }
-});
+);
 
 export default UserRouter;
