@@ -41,6 +41,7 @@ describe("hello test test test jest", () => {
     description: "nice",
     maxGuests: 10,
     city: cityId,
+    host: "Stefano",
   };
 
   //   console.log("========================>", validAccommodation);
@@ -81,6 +82,7 @@ describe("hello test test test jest", () => {
       description: "nice, nice",
       maxGuests: 110,
       city: cityId,
+      host: "Riccardo",
     });
 
     expect(response.status).toBe(203);
@@ -122,6 +124,7 @@ describe("hello test test test jest", () => {
       description: "nice",
       maxGuests: 10,
       city: cityId,
+      host: "Daniele",
     });
 
     expect(response.status).toBe(404);
