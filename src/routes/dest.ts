@@ -60,15 +60,19 @@ DesRouter.route("/:cityId").get(async (req, res) => {
 });
 export default DesRouter;
 
-
-
-destinationRouter.get("/", async (req, res, next) => {
+DesRouter.get("/", async (req, res, next) => {
   try {
-    const { available } = req.query
+    const { available } = req.query;
 
-    const destination = await DestinationModel.find(
+    const destination = await DestinationSchema.find(
       available
-        ? { _id: [...(await AccommodationModel.find().populate("city").distinct("city"))] }
+        ? {
+            _id: [
+              ...(await AccomodationSchema.find()
+                .populate("city")
+                .distinct("city")),
+            ],
+          }
         : {}
     );
 
