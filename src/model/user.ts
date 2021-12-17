@@ -60,20 +60,24 @@ UserSchema.methods.toJSON = function () {
   return userObject;
 };
 
-// check request headers basic auth here for matches in mongoDB
-UserSchema.statics.checkCredentials = async function (email, plainPassword) {
-  // 1. find the author by email
-  const author = await this.findOne({ email }); // "this" refers to the authorModel
+// check request body basic auth here for matches in mongoDB
+UserSchema.statics.checkCredentials = async function (email, plainPw) {
+  // 1. find the user by email
+  const user = await this.findOne({ email }); // "this" refers to the UserModel
 
-  if (author) {
-    // 2. if author is found --> compare plainPassword with hashed one
-    const isMatch = await bcrypt.compare(plainPassword, author.password);
+  if (user) {
+    // console.log(user);
+    // console.log(email);
+    // console.log(plainPw);
+    // 2. if user its found --> compare plainPw with hashed one
+    const isMatch = await bcrypt.compare(plainPw, user.password);
     if (isMatch) {
       // 3. if they match --> return a proper response
-      return author;
+      return user;
     } else {
       // 4. if they don't --> return null
       return null;
+      console.log("nullish");
     }
   } else {
     return null; // also if email is not ok --> return null

@@ -1,15 +1,11 @@
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
-import UserModel, { User } from "../model/user";
+import UserModel, { UserDocument } from "../model/user";
 
-const secret = process.env.JWT_SECRET;
-
-export const JWTAuthenticate = async (user: User) => {
+export const JWTAuthenticate = async (user: UserDocument) => {
   // 1. given the user generates tokens (access and refresh)
-  const accessToken: string = await generateJWTToken({ email: user.email });
-  const refreshToken: string = await generateRefreshToken({
-    email: user.email,
-  });
+  const accessToken: any = await generateJWTToken({ id: user._id });
+  const refreshToken: any = await generateRefreshToken({ id: user._id });
 
   // 2. refresh token should be saved in db
   user.refreshToken = refreshToken;
@@ -19,63 +15,71 @@ export const JWTAuthenticate = async (user: User) => {
   return { accessToken, refreshToken };
 };
 
-const generateJWTToken = (payload: string) =>
+const generateJWTToken = (payload: Object) =>
   new Promise((resolve, reject) => {
+    const secret = process.env.JWT_SECRET;
+    console.log("here", secret);
+    console.log("here", process.env.JWT_SECRET);
     if (secret) {
       jwt.sign(payload, secret, { expiresIn: "15m" }, (err, token) => {
         if (err) reject(err);
         else resolve(token);
       });
     } else {
-      console.log("Secret missing - check enviromental variables");
+      console.log("Secret missing - check enviromental variables123");
     }
   });
 
-const generateRefreshToken = (payload) =>
-  new Promise((resolve, reject) =>
-    jwt.sign(
-      payload,
-      process.env.JWT_REFRESH_SECRET,
-      { expiresIn: "1 week" },
-      (err, token) => {
+const generateRefreshToken = (payload: Object) =>
+  new Promise((resolve, reject) => {
+    const secret = process.env.JWT_SECRET;
+    if (secret) {
+      jwt.sign(payload, secret, { expiresIn: "1 week" }, (err, token) => {
         if (err) reject(err);
         else resolve(token);
-      }
-    )
-  );
+      });
+    } else {
+      console.error("Secret missing - check enviromental variables234");
+    }
+  });
 
-export const verifyJWT = (token) =>
-  new Promise((res, rej) =>
-    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-      if (err) rej(err);
-      else res(decodedToken);
-    })
-  );
+export const verifyJWT = (token: string) =>
+  new Promise((res, rej) => {
+    const secret = process.env.JWT_SECRET;
+    if (secret) {
+      jwt.verify(token, secret, (err, decodedToken) => {
+        if (err) rej(err);
+        else res(decodedToken);
+      });
+    } else {
+      console.error("Secret missing - check enviromental variables345");
+    }
+  });
 
-const verifyRefreshToken = (token) =>
-  new Promise((res, rej) =>
-    jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, decodedToken) => {
-      if (err) rej(err);
-      else res(decodedToken);
-    })
-  );
+const verifyRefreshToken = (token: string) =>
+  new Promise((res, rej) => {
+    const secret = process.env.JWT_SECRET;
+    if (secret) {
+      jwt.verify(token, secret, (err, decodedToken) => {
+        if (err) rej(err);
+        else res(decodedToken);
+      });
+    } else {
+      console.error("Secret missing - check enviromental variables456");
+    }
+  });
 
-// generateJWTToken({ _id: "oasjidoasjdosaij" })
-//   .then(token => console.log(token))
-//   .catch(err => console.log(err))
-
-// const token = await generateJWTToken({})
-
-// const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" })
-
-export const verifyRefreshAndGenerateTokens = async (currentRefreshToken) => {
+export const verifyRefreshAndGenerateTokens = async (
+  currentRefreshToken: string
+) => {
   // 1. check the validity of current refresh token (exp date and integrity)
   const decodedRefreshToken = await verifyRefreshToken(currentRefreshToken);
+  console.log(decodedRefreshToken);
 
   // 2. if token is valid we are going to check if it is the same in our db
-  const user = await UserModel.findById(decodedRefreshToken._id);
+  const user = await UserModel.findById(decodedRefreshToken);
 
-  if (!user) throw new createHttpError(404, "User not found!");
+  if (!user) throw createHttpError(404, "User not found!");
 
   if (user.refreshToken && user.refreshToken === currentRefreshToken) {
     // 3. if everything is fine we are going to generate a new pair of tokens
@@ -84,16 +88,6 @@ export const verifyRefreshAndGenerateTokens = async (currentRefreshToken) => {
     // 4. return tokens
     return { accessToken, refreshToken };
   } else {
-    throw new createHttpError(401, "Token not valid!");
+    throw createHttpError(401, "Token not valid!");
   }
 };
-
-/* FE EXAMPLE
-await fetch("/whateverResource", {headers: {Authorization: accessToken}})
-  if(401) {
-    const {newAccessToken, newRefreshToken} = await fetch("/users/refreshToken", {method: "POST", body: {currentRefreshToken: "uih1ih3i21h3iuh21iu3hiu21"}})
-    localStorage.setItem("accessToken", newAccessToken)
-    localStorage.setItem("refreshToken", refreshToken)
-    await fetch("/whateverResource", {headers: {Authorization: newAccessToken}})
-  }
-  */
