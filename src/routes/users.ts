@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import createHttpError from "http-errors";
 import AccomodationModel from "../model/accomodation";
-import DestinationModel from "../model/destination";
 import UserModel from "../model/user";
 import { JWTAuthMiddleware } from "../auth/token";
 import { JWTAuthenticate, verifyRefreshAndGenerateTokens } from "../auth/tools";
@@ -63,6 +62,30 @@ UserRouter.get("/", async (req, res, next) => {
     const users = await UserModel.find();
     res.send({
       users,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+UserRouter.get("/me", async (req, res, next) => {
+  try {
+    const user = await UserModel.findById(req.user._id);
+    res.send({
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+UserRouter.get("/me/accommodation", async (req, res, next) => {
+  try {
+    const accomodations = await AccomodationModel.find({ host: req.user._id });
+    res.send({
+      accomodations,
     });
   } catch (error) {
     console.log(error);

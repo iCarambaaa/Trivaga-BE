@@ -1,9 +1,13 @@
-import { RequestHandler } from "express"; // types for req, res, next
+import { RequestHandler, Request } from "express"; // types for req, res, next
 import createHttpError from "http-errors";
 import UserModel from "../model/user";
 import { verifyJWT } from "./tools.js";
 
-export const JWTAuthMiddleware: RequestHandler = async (req, res, next) => {
+export const JWTAuthMiddleware: RequestHandler = async (
+  req: Request,
+  res,
+  next
+) => {
   // 1. Check if Authorization header is received, if it is not --> 401
   if (!req.headers.authorization) {
     next(createHttpError(401, "Please provide token in Authorization header!"));

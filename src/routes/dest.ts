@@ -1,7 +1,8 @@
 import express from "express";
+import mongoose from "mongoose";
 import AccomodationSchema from "../model/accomodation";
 import DestinationSchema from "../model/destination";
-import mongoose from "mongoose";
+import { JWTAuthMiddleware } from "../auth/token";
 
 const DesRouter = express.Router();
 

@@ -1,6 +1,8 @@
 import express from "express";
 import AccomodationSchema from "../model/accomodation";
 import DestinationSchema from "../model/accomodation";
+import { RoleCheckMiddleware } from "../auth/roleCheck";
+import { JWTAuthMiddleware } from "../auth/token";
 
 const AccRouter = express.Router();
 
