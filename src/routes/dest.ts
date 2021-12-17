@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import AccomodationSchema from "../model/accomodation";
 import DestinationSchema from "../model/destination";
 import mongoose from "mongoose";
@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 const DesRouter = express.Router();
 
 DesRouter.route("/")
-  .post(async (req, res) => {
+  .post(async (req: Request, res: Response) => {
     try {
       const alreadyHere = await DestinationSchema.find({});
       console.log(alreadyHere);
@@ -29,7 +29,7 @@ DesRouter.route("/")
       console.log(error);
     }
   })
-  .get(async (req, res) => {
+  .get(async (req: Request, res: Response) => {
     try {
       //const destinations = await DestinationSchema.find().distinct("city");
       //const destinations = await DestinationSchema.distinct("city");
@@ -44,7 +44,7 @@ DesRouter.route("/")
     }
   });
 
-DesRouter.route("/:cityId").get(async (req, res) => {
+DesRouter.route("/:cityId").get(async (req: Request, res: Response) => {
   try {
     const accomodations = await AccomodationSchema.find({
       city: req.params.cityId,
@@ -62,13 +62,13 @@ export default DesRouter;
 
 
 
-destinationRouter.get("/", async (req, res, next) => {
+DesRouter.get("/", async (req: Request, res: Response) => {
   try {
     const { available } = req.query
 
-    const destination = await DestinationModel.find(
+    const destination = await DestinationSchema.find(
       available
-        ? { _id: [...(await AccommodationModel.find().populate("city").distinct("city"))] }
+        ? { _id: [...(await AccomodationSchema.find().populate("city").distinct("city"))] }
         : {}
     );
 

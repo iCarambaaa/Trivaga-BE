@@ -1,11 +1,11 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import AccomodationSchema from "../model/accomodation";
 import DestinationSchema from "../model/accomodation";
 
 const AccRouter = express.Router();
 
 AccRouter.route("/")
-  .get(async (req, res) => {
+  .get(async (req, res: Response) => {
     try {
       const accommodations = await AccomodationSchema.find({}).populate({
         path: "city",
@@ -19,7 +19,7 @@ AccRouter.route("/")
       console.log(error);
     }
   })
-  .post(async (req, res) => {
+  .post(async (req: Request, res: Response) => {
     try {
       const accommodation = new AccomodationSchema(req.body);
       if (accommodation) {
@@ -34,7 +34,7 @@ AccRouter.route("/")
   });
 
 AccRouter.route("/:id")
-  .get(async (req, res) => {
+  .get(async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
       const accomodation = await AccomodationSchema.findById(id);
@@ -47,7 +47,7 @@ AccRouter.route("/:id")
       console.log(error);
     }
   })
-  .put(async (req, res) => {
+  .put(async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
       const updatedAccomodation = await AccomodationSchema.findByIdAndUpdate(
@@ -64,7 +64,7 @@ AccRouter.route("/:id")
       console.log(error);
     }
   })
-  .delete(async (req, res) => {
+  .delete(async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
       const deleted = await AccomodationSchema.findByIdAndDelete(id);
