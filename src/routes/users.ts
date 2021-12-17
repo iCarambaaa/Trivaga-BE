@@ -43,11 +43,11 @@ UserRouter.route("/login").post(async (req, res, next) => {
 UserRouter.post("/refreshToken", async (req, res, next) => {
   try {
     // 1. Receive the current refresh token from req.body
-    const { currentRefreshToken } = req.body;
-
+    const { refreshToken: currentRefreshToken } = req.body;
+    console.log(currentRefreshToken);
     // 2. Check the validity of that (check if it is not expired, check if it hasn't been compromised, check if it is in db)
     const { accessToken, refreshToken } = await verifyRefreshAndGenerateTokens(
-      currentRefreshToken.toString()
+      currentRefreshToken
     );
     // 3. If everything is fine --> generate a new pair of tokens (accessToken and refreshToken)
 

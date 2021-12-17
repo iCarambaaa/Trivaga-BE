@@ -2,6 +2,12 @@ import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 import UserModel, { UserDocument } from "../model/user";
 
+interface CryptObj {
+  id: string;
+  iat: number;
+  exp: number;
+}
+
 export const JWTAuthenticate = async (user: UserDocument) => {
   // 1. given the user generates tokens (access and refresh)
   const accessToken: any = await generateJWTToken({ id: user._id });
@@ -73,11 +79,13 @@ export const verifyRefreshAndGenerateTokens = async (
   currentRefreshToken: string
 ) => {
   // 1. check the validity of current refresh token (exp date and integrity)
-  const decodedRefreshToken = await verifyRefreshToken(currentRefreshToken);
+  const decodedRefreshToken: any = await verifyRefreshToken(
+    currentRefreshToken
+  );
   console.log(decodedRefreshToken);
 
   // 2. if token is valid we are going to check if it is the same in our db
-  const user = await UserModel.findById(decodedRefreshToken);
+  const user = await UserModel.findById(decodedRefreshToken.id);
 
   if (!user) throw createHttpError(404, "User not found!");
 
