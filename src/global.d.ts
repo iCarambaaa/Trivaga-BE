@@ -7,3 +7,6 @@ declare global {
     }
   }
 }
+
+// user?: ReturnType<typeof UserModel.findById>
+// user?: UserDocument;

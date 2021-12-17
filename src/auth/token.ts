@@ -18,10 +18,11 @@ export const JWTAuthMiddleware: RequestHandler = async (
 
       // 3. Verify token, if everything goes fine we are getting back the payload of the token ({_id: "iojasodjoasjd"}), otherwise an error will be thrown by jwt library
       const decodedToken: any = await verifyJWT(token);
-
+      console.log(decodedToken._id);
+      console.log(decodedToken);
       // 4. If token is valid we are going to attach him/her to request object
 
-      const user = await UserModel.findById(decodedToken._id);
+      const user = await UserModel.findById(decodedToken.id);
       if (user) {
         req.user = user;
         next();
