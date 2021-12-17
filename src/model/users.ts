@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-
+import { Model, Document } from "mongoose";
 
 const bcrypt = require("bcrypt");
 
-export interface UsersDocument   {
+export interface UsersDocument extends Document  {
     _id?: string;
     name: string
     email: string;
@@ -11,7 +11,9 @@ export interface UsersDocument   {
     role: string;
 }
 
-
+interface UserModel extends Model<UsersDocument> {
+    verifyCredentials(): any;
+}
 
 const { Schema, model } = mongoose
 
